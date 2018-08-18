@@ -39,8 +39,8 @@ double fn_R_A(Inpar st, double t, double x[], double y[]){
 
 // realistic
 double fn_R_A(Inpar st, double t, double x[], double y[]){
-  return interpol(st,t,x,y);
-  //return st.R_A;
+  //return interpol(st,t,x,y);
+  return st.R_A;
 }
 
 

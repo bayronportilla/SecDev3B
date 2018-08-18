@@ -17,7 +17,8 @@ int main (void){
   // Charging data files for interpolation
   //
   ////////////////////////////////////////////////////////////
-  
+
+  /*
   FILE *file;
   file   = fopen("red_dwarf_radius.dat","r");
   Nlines = counterLines("red_dwarf_radius.dat");
@@ -35,7 +36,7 @@ int main (void){
   acc    = gsl_interp_accel_alloc ();
   spline = gsl_spline_alloc (gsl_interp_linear, Nlines);
   gsl_spline_init(spline,tim_A,rad_A,Nlines);
-
+  */
   /*
   FILE *files;
   files = fopen("interpolated_radius.dat","w");
@@ -52,7 +53,6 @@ int main (void){
   //                              const double epsrel)
 
   //printf("%f\n",tim_B[0]*st.uT/YEARS);
-
 
   ////////////////////////////////////////////////////////////
   // This is the only line must be modified by the user
@@ -90,6 +90,7 @@ int main (void){
 
    FILE *fp3;
    fp3  = fopen("derivada.dat","w");
+
    
    double ti = t;
    double a_stop,e_stop,d_roche,t_stop,a_min;
@@ -101,6 +102,8 @@ int main (void){
 
    char stop_reason[100];
    int twrite=0;
+
+
 
 
    while(t<=st.t_end){
