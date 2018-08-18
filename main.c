@@ -122,7 +122,7 @@ int main (void){
      }
      */
      
-     printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
+     //printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
      
      
      fprintf(fp,"%.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e \
@@ -138,11 +138,12 @@ int main (void){
 			y[12],y[13],y[14],y[15],
 			t,st));
      
-     
+     /*
      if(y[0]<a_min){
        strcpy(stop_reason,"a_min_or_a_stop_reached");
        break;
      }
+     */
      
    } // end while
       
