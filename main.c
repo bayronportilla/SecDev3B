@@ -18,34 +18,42 @@ int main (void){
   //
   ////////////////////////////////////////////////////////////
 
-  /*
+  
   FILE *file;
-  file   = fopen("red_dwarf_radius.dat","r");
-  Nlines = counterLines("red_dwarf_radius.dat");
+  file   = fopen("07MS.dat","r");
+  Nlines = counterLines("07MS.dat");
   tim_A  = (double *)malloc(Nlines*sizeof(double));
   rad_A  = (double *)malloc(Nlines*sizeof(double));
   
   int j=0;
   double col1,col2,col3;
-  while(fscanf(file,"%lf %lf %lf",&col1,&col2,&col3)!=EOF){
+  //while(fscanf(file,"%lf %lf %lf",&col1,&col2,&col3)!=EOF){
+  while(fscanf(file,"%lf %lf",&col1,&col2)!=EOF){
     tim_A[j] = col1*Gyr/st.uT;
-    rad_A[j] = col3*RS/st.uL;
+    rad_A[j] = col2*RS/st.uL;
     j++;
   }
 
   acc    = gsl_interp_accel_alloc ();
   spline = gsl_spline_alloc (gsl_interp_linear, Nlines);
   gsl_spline_init(spline,tim_A,rad_A,Nlines);
-  */
-  /*
+  
+
   FILE *files;
   files = fopen("interpolated_radius.dat","w");
+
   double time;
-  for(time=1.0e6*YEARS/st.uT;time<5.0e9*YEARS/st.uT;time+=5.0e5*YEARS/st.uT){
+
+
+  printf("%f \n",tim_A[Nlines-1]);
+  for(time=tim_A[0];time<tim_A[Nlines-1];time+=(1.0e5)*YEARS/st.uT){
+    //fprintf(files,"%1.4e %1.4e \n",time*st.uT/Gyr,fn_R_A(st,time,tim_A,rad_A)*st.uL/RS);
     fprintf(files,"%1.4e %1.4e \n",time*st.uT/Gyr,fn_R_A(st,time,tim_A,rad_A)*st.uL/RS);
   }
-  */
   
+
+  
+
   //gsl_odeiv2_driver_alloc_y_new(const gsl_odeiv2_system * sys,
   //                              const gsl_odeiv2_step_type * T,
   //                              const double hstart,
@@ -94,16 +102,14 @@ int main (void){
    
    double ti = t;
    double a_stop,e_stop,d_roche,t_stop,a_min;
-   a_stop = 0.005*st.a_in;
-   a_min  = 0.001*AU/st.uL;
+   a_stop = 0.01*AU/st.uL;
+   a_min  = 0.1*AU/st.uL;
    e_stop = 0.001;
    t_stop = 5.0e6*YEARS/st.uT;
    d_roche = 1.66*st.R_A*pow((st.m_A+st.m_B)/st.m_B , 1/3.);
 
    char stop_reason[100];
    int twrite=0;
-
-
 
 
    while(t<=st.t_end){
@@ -122,7 +128,7 @@ int main (void){
      }
      */
      
-     //printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
+     printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
      
      
      fprintf(fp,"%.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e \
@@ -138,12 +144,12 @@ int main (void){
 			y[12],y[13],y[14],y[15],
 			t,st));
      
-     /*
+     
      if(y[0]<a_min){
-       strcpy(stop_reason,"a_min_or_a_stop_reached");
+       //strcpy(stop_reason,"a_min_or_a_stop_reached");
        break;
      }
-     */
+     
      
    } // end while
       

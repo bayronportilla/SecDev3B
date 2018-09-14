@@ -20,9 +20,9 @@ double fn_R_A(Inpar st, double t, double x[], double y[]){
 
   double m,R_ini,R_end,t_ini,t_end,R;
   
-  R_end = 0.59*RS/st.uL;
-  R_ini = 1.9789*RS/st.uL;
-  t_end = 10.0e6*YEARS/st.uT;
+  R_end = 1.1*RS/st.uL;
+  R_ini = 2.62*RS/st.uL;
+  t_end = 19.0e6*YEARS/st.uT;
   t_ini = st.t_ini*YEARS/st.uT;
   m = (R_end - R_ini)/(t_end - t_ini);
   R = m*t+R_ini;
@@ -39,8 +39,8 @@ double fn_R_A(Inpar st, double t, double x[], double y[]){
 
 // realistic
 double fn_R_A(Inpar st, double t, double x[], double y[]){
-  //return interpol(st,t,x,y);
-  return st.R_A;
+  return interpol(st,t,x,y);
+  //return st.R_A;
 }
 
 
