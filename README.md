@@ -4,4 +4,4 @@ SecDev3B is a C-written code intended to solve the secular dynamics of hierarchi
 
 
 [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org:/repo/bayronportilla/notebooks)
-This site was built using [![GitHub Pages](https://pages.github.com/)
+This site was built using [![Arxiv](https://pages.github.com/)
