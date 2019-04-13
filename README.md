@@ -6,4 +6,4 @@ SecDev3B is a C-written code intended to solve the secular dynamics of hierarchi
 [![Binder](https://img.shields.io/badge/MNRAS-10.1093/mnras/stz370-blue.svg)](https://academic.oup.com/mnras/article-abstract/485/1/522/5307896)
 
 This site was built using
-[![](https://img.shields.io/badge/MNRAS-10.1093/mnras/stz370-blue.svg)](https://academic.oup.com/mnras/article-abstract/485/1/522/5307896)
+![](https://img.shields.io/badge/MNRAS-10.1093/mnras/stz370-blue.svg)](https://academic.oup.com/mnras/article-abstract/485/1/522/5307896)
