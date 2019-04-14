@@ -5,7 +5,8 @@ SecDev3B is a C-written code to solve the secular dynamics of hierarchical three
 
 # Installation
 
-
+# Running a test
+After installation, 
 
 
 
