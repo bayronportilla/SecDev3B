@@ -8,9 +8,10 @@
 
 
 int main (void){
-
+  
   Inpar st;
   st = params();
+
   
   ////////////////////////////////////////////////////////////
   //
@@ -18,10 +19,10 @@ int main (void){
   //
   ////////////////////////////////////////////////////////////
 
-  
+  /*  
   FILE *file;
-  file   = fopen("07MS.dat","r");
-  Nlines = counterLines("07MS.dat");
+  file   = fopen("red_dwarf_radius.dat","r");
+  Nlines = counterLines("red_dwarf_radius.dat");
   tim_A  = (double *)malloc(Nlines*sizeof(double));
   rad_A  = (double *)malloc(Nlines*sizeof(double));
   
@@ -41,7 +42,7 @@ int main (void){
 
   FILE *files;
   files = fopen("interpolated_radius.dat","w");
-
+  
   double time;
 
 
@@ -52,7 +53,7 @@ int main (void){
   }
   
 
-  
+  */
 
   //gsl_odeiv2_driver_alloc_y_new(const gsl_odeiv2_system * sys,
   //                              const gsl_odeiv2_step_type * T,
