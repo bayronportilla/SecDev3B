@@ -1,4 +1,5 @@
 * Notar el termino Z_GR en la ecuacion (A4) de Wu 2003 ¿deberia incluirse?
 * Pensar en una forma mas general de usar las unidades canonicas. Como está,
   se elige uM y uL y se deriva uT, exclusivamente en ese orden.
+* Archivo para describir variables en config.cfg
 
