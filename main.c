@@ -64,7 +64,7 @@ int main (void){
   //printf("%f\n",tim_B[0]*st.uT/YEARS);
 
   ////////////////////////////////////////////////////////////
-  // This is the only line must be modified by the user
+  // This is the only line that must be modified by the user
   //
   const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
   //
