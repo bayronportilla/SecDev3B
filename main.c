@@ -66,13 +66,18 @@ int main (void){
   ////////////////////////////////////////////////////////////
   // This is the only line that must be modified by the user
   //
+  //const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
   const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
   //
   ////////////////////////////////////////////////////////////
 
-  double hstart = 1.0e0*YEARS/st.uT;
+  double hstart = 0.01e0*YEARS/st.uT;
+  double maxh=2*YEARS/st.uT;
   gsl_odeiv2_system sys = { func, NULL, 16, &st}; // Define sistema de ecuaciones
-  gsl_odeiv2_driver *d = gsl_odeiv2_driver_alloc_y_new (&sys, T, hstart, 1e-10, 1e-10);
+  gsl_odeiv2_driver *d = gsl_odeiv2_driver_alloc_yp_new (&sys, T, hstart, 1e-10, 1e-10);
+  gsl_odeiv2_driver_set_nmax(d,1e20);
+  //gsl_odeiv2_driver_set_hmax(d,maxh);
+
 
   double y[16] = { st.a_in, st.a_out, st.e_in, st.e_out, 
 		   st.I_in, st.I_out, st.W_in, st.W_out,
@@ -103,10 +108,10 @@ int main (void){
    
    double ti = t;
    double a_stop,e_stop,d_roche,t_stop,a_min;
-   a_stop = 0.01*AU/st.uL;
-   a_min  = 0.1*AU/st.uL;
+   a_stop = 0.00001*AU/st.uL;
+   a_min  = 0.00001*AU/st.uL;
    e_stop = 0.001;
-   t_stop = 5.0e6*YEARS/st.uT;
+   t_stop = 10.0e6*YEARS/st.uT;
    d_roche = 1.66*st.R_A*pow((st.m_A+st.m_B)/st.m_B , 1/3.);
 
    char stop_reason[100];
@@ -130,6 +135,25 @@ int main (void){
      */
      
      printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
+     /*printf("da_in_dt=%.15e\n",da_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("da_out_dt=%.15e\n",da_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("de_in_dt=%.15e\n",de_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("de_out_dt=%.15e\n",de_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dI_in_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dI_out_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dW_in_dt=%.15e\n",dW_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dW_out_dt=%.15e\n",dW_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dw_in_dt=%.15e\n",dw_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dw_out_dt=%.15e\n",dw_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_Ax_dt=%.15e\n",dOm_Ax_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_Ay_dt=%.15e\n",dOm_Ay_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_Az_dt=%.15e\n",dOm_Az_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_Bx_dt=%.15e\n",dOm_Bx_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_By_dt=%.15e\n",dOm_By_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     printf("dOm_Bz_dt=%.15e\n",dOm_Bz_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));*/
+     
+     
+     
      
      
      fprintf(fp,"%.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e \
