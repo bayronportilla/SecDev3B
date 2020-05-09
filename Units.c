@@ -29,7 +29,7 @@ El retorno de la funcion es un puntero a un arreglo de tres componentes
 (uM,uL,uT), en ese orden estricto.
 */
 
-
+ 
 double *units(double a, double b, char var[]){
 
   char   var1[] = "uM";
@@ -68,18 +68,28 @@ double *units(double a, double b, char var[]){
   return array;
 }
 
- /*
-int main(void){
+ 
+/*
+double *units(double a, double b, char var[]){
 
+  char   var1[] = "uM";
+  char   var2[] = "uL";
+  char   var3[] = "uT";
+  double B3_univ      = 351.6e-120;
   double uM,uL,uT;
-  uM = units(5*149.6e9,3.14e7,"uM")[0];
-  uL = units(5*149.6e9,3.14e7,"uM")[1];
-  uT = units(5*149.6e9,3.14e7,"uM")[2];
+   
+  static double array[3];
+   
+  // I will find the unit of time
+  uM = a;
+  uL = b;
+  uT = pow(uL*uL*uL*uM*uM*uM*uM/(B3_univ),0.5);
 
-  printf("%1.9e \n",uM);
-  printf("%1.9e \n",uL);
-  printf("%1.9e \n",uT);
-     
-  return 0;
+
+  array[0] = uM;
+  array[1] = uL;
+  array[2] = uT;
+    
+  return array;
 }
- */
+*/

@@ -241,6 +241,9 @@ double de_in_dt(double a_in, double a_out, double e_in,
   de_in_dt_tid = -(V_A(tv_A,R_A,k_A,m_A,m_B,a_in,e_in,W_in,I_in,w_in,Om_Ax,Om_Ay,Om_Az) + V_B(tv_B,R_B,k_B,m_A,m_B,a_in,e_in,W_in,I_in,w_in,Om_Bx,Om_By,Om_Bz))*e_in;
 
   return (params.q_orb*de_in_dt_orb) + (params.q_tid*de_in_dt_tid);
+
+  //printf("%.16e\n",C2(m_A,m_B,m_C,a_in,a_out,e_out)/G_1(m_A,m_B,a_in,e_in));
+  //return 2;
 }
 
 

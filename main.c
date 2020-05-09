@@ -66,16 +66,20 @@ int main (void){
   ////////////////////////////////////////////////////////////
   // This is the only line that must be modified by the user
   //
+  
+  //const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk2;
+  //const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk4;
+  const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rkf45;
+  //const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rkck;
   //const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
-  const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
   //
   ////////////////////////////////////////////////////////////
 
-  double hstart = 0.01e0*YEARS/st.uT;
+  double hstart = 1e1*YEARS/st.uT;
   double maxh=2*YEARS/st.uT;
   gsl_odeiv2_system sys = { func, NULL, 16, &st}; // Define sistema de ecuaciones
-  gsl_odeiv2_driver *d = gsl_odeiv2_driver_alloc_yp_new (&sys, T, hstart, 1e-10, 1e-10);
-  gsl_odeiv2_driver_set_nmax(d,1e20);
+  gsl_odeiv2_driver *d = gsl_odeiv2_driver_alloc_y_new (&sys, T, hstart, 1e-4, 1e-4); //1e-5
+  
   //gsl_odeiv2_driver_set_hmax(d,maxh);
 
 
@@ -98,12 +102,6 @@ int main (void){
    strcpy(dest,".dat");
    strcpy(name_files,strcat(src,dest));
    fp  = fopen(name_files,"w");
-   
-   FILE *fp2;
-   fp2  = fopen("final_values.dat","w");
-
-   FILE *fp3;
-   fp3  = fopen("derivada.dat","w");
 
    
    double ti = t;
@@ -113,39 +111,58 @@ int main (void){
    e_stop = 0.001;
    t_stop = 10.0e6*YEARS/st.uT;
    d_roche = 1.66*st.R_A*pow((st.m_A+st.m_B)/st.m_B , 1/3.);
-
+   
+   
    char stop_reason[100];
    int twrite=0;
 
 
+   printf("beta_3=%.16e\n",(G*G/16.0) * pow(st.m_A+st.m_B,7)/pow(st.m_A+st.m_B+st.m_C,3) * pow(st.m_C,7)/pow(st.m_A*st.m_B,3));
+   printf("de_in_dt=%.15e\n",de_in_dt(st.a_in, st.a_out, st.e_in,
+				      st.e_out,st.I_in, st.I_out,
+				      st.W_in, st.W_out,st.w_in,
+				      st.w_out, st.Om_Ax, st.Om_Ay,
+				      st.Om_Az, st.Om_Bx, st.Om_By,
+				      st.Om_Bz,t,st));
+   
+   //exit(0);
+   double hmax=10*YEARS/st.uT;
+   //gsl_odeiv2_driver_set_hmax(d,fabs(hmax));
+
+   
    while(t<=st.t_end){
-     s = gsl_odeiv2_driver_apply(d, &t, ti, y); // from t to ti
+     s = gsl_odeiv2_driver_apply(d, &t, ti, y); // from t to ti     
+     //s = gsl_odeiv2_driver_apply_fixed_step(d, &t,hstep, 10000,y); // from t to ti
+     //printf("in while\n");
+     //printf("de_in_dt=%.15e\n",de_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
      if (s != GSL_SUCCESS){
        printf ("error: driver returned %d\n", s);
        break;
      }
      
+     
      ti += st.h_output;     
      progress = (t/st.t_end)*100.0;
 
-     /*
-     if ( (int)progress%10 == 0){
-       printf("Progress: %d per cent \n",(int)progress);
-     }
-     */
      
-     printf("t=%.4f Myr a_in=%.16e e_in=%.16e \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2]);
-     /*printf("da_in_dt=%.15e\n",da_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("da_out_dt=%.15e\n",da_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("de_in_dt=%.15e\n",de_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("de_out_dt=%.15e\n",de_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dI_in_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dI_out_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dW_in_dt=%.15e\n",dW_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dW_out_dt=%.15e\n",dW_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dw_in_dt=%.15e\n",dw_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dw_out_dt=%.15e\n",dw_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
-     printf("dOm_Ax_dt=%.15e\n",dOm_Ax_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     
+     printf("t=%.4f Myr a_in=%.16e e_in=%.16e error=%d \n",t*st.uT/Myr,y[0]*st.uL/AU,y[2],s);
+     //printf("da_in_dt=%.15e\n",da_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("da_out_dt=%.15e\n",da_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("de_in_dt=%.15e\n",de_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("L_1^4=%.16e\n",pow(L_1(st.m_A,st.m_B,y[0]),4));
+     //printf("L_2^3=%.16e\n",pow(L_2(st.m_A,st.m_B,st.m_C,y[1]),3));
+     //printf("G_2^3=%.16e\n",pow(G_2(st.m_A,st.m_B,st.m_C,y[1],y[3]),3));
+     //printf("beta_3=%.16e\n",(G*G/16.0) * pow(st.m_A+st.m_B,7)/pow(st.m_A+st.m_B+st.m_C,3) * pow(st.m_C,7)/pow(st.m_A*st.m_B,3));
+     
+     //printf("de_out_dt=%.15e\n",de_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dI_in_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dI_out_dt=%.15e\n",dI_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dW_in_dt=%.15e\n",dW_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dW_out_dt=%.15e\n",dW_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dw_in_dt=%.15e\n",dw_in_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     //printf("dw_out_dt=%.15e\n",dw_out_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
+     /*printf("dOm_Ax_dt=%.15e\n",dOm_Ax_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
      printf("dOm_Ay_dt=%.15e\n",dOm_Ay_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
      printf("dOm_Az_dt=%.15e\n",dOm_Az_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
      printf("dOm_Bx_dt=%.15e\n",dOm_Bx_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));
@@ -153,21 +170,12 @@ int main (void){
      printf("dOm_Bz_dt=%.15e\n",dOm_Bz_dt(y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],t,st));*/
      
      
-     
-     
-     
+       
      fprintf(fp,"%.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e \
 %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e %.5e \n",
 	     t,y[0],y[1],y[2],y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12],y[13],y[14],y[15],
 	     st.m_A,st.m_B,fn_R_A(st,t,tim_A,rad_A),st.R_B,st.k_A,st.k_B,st.tv_A,st.tv_B,st.gyr_rad_A,st.gyr_rad_B);
      
-     
-     fprintf(fp3,"%.5e %.5e \n",
-	     t,de_in_dt(y[0],y[1],y[2],y[3],
-			y[4],y[5],y[6],y[7],
-			y[8],y[9],y[10],y[11],
-			y[12],y[13],y[14],y[15],
-			t,st));
      
      
      if(y[0]<a_min){
@@ -177,31 +185,13 @@ int main (void){
      
      
    } // end while
-      
-
-
-   ////////////////////////////////////////////////////////////
-   // write decay time vs a_ini,e_ini,I_ini.
-   
-   double Itot_ini=(st.I_in + st.I_out)*InDeg;
-   
-   if(strcmp(stop_reason,"")==0){
-     fprintf(fp2,"%s %.5e %.5e %.5e %.5e %s \n",st.sim_name,t*st.uT/Myr,st.a_in*st.uL/AU,st.e_in,Itot_ini,"time_exhausted");
-   }
-   else{
-     fprintf(fp2,"%s %.5e %.5e %.5e %.5e %s \n",st.sim_name,t*st.uT/Myr,st.a_in*st.uL/AU,st.e_in,Itot_ini,stop_reason);
-   }  
-
-   
+         
 
    ////////////////////////////////////////////////////////////
    // Releasing memory
    
    gsl_odeiv2_driver_free (d);
    fclose(fp);
-   fclose(fp2);
-   //free(e_extreme);
-   //free(t_extreme);
    gsl_spline_free (spline);
    gsl_interp_accel_free (acc);
   

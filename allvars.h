@@ -11,8 +11,8 @@
 #define YEARS  (365.25*86400)
 #define Myr    (1.0e6*YEARS)
 #define DAYS   86400.0 
-#define G      1.0
 #define PI     3.14159265358979323
+#define G      1.0
 #define InDeg  (180.0/PI)
 #define cspeed 300.0e6
 #define Gyr    (1.0e9*YEARS)
@@ -100,31 +100,7 @@ extern gsl_spline       *spline;
 
 
 
-/*  
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_odeiv2.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_spline.h>
-#include <libconfig.h>
-#include "Units.h"
-#include "matrix.h"
 
-#include "proto.h"
-#include "Params.h"
-#include "interpol.h"
-#include "bulk.h"
-#include "generic.h"
-
-#include "FetchInfo.h"
-#include "ModOct.h"
-//#include "ModQuad.h"
-*/
 
 
 

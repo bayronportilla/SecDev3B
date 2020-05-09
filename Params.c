@@ -2,6 +2,7 @@
 #include <libconfig.h>
 #include <math.h>
 #include "proto.h"
+
 /*
 typedef struct Inpar_params{
   
@@ -318,7 +319,6 @@ Inpar params(){
   rest.q_GR     = q_GR;
   rest.rcu      = rcu;
   rest.rse      = rse;
-
   rest.uM       = uM;
   rest.uL       = uL;
   rest.uT       = uT;
