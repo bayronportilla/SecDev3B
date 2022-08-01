@@ -1,0 +1,9 @@
+GSL
+- Download file to the ext dir
+- Uncompress
+- ./configure --prefix($pwd)
+- make 
+- make install
+
+LIBCONFIG
+-Same steps
