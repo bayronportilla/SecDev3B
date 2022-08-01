@@ -11,7 +11,7 @@ int FetchInfo(Inpar st){
   strcpy(src,st.sim_name);
   strcpy(dest,".log");
   strcpy(name_files,strcat(src,dest));
-  
+
   fp = fopen(name_files,"w");
 
   fprintf(fp,"0   m_A          %1.17e \n\
@@ -57,7 +57,6 @@ int FetchInfo(Inpar st){
 	  st.P_rot_B,st.alpha_A,st.alpha_B,st.beta_A,st.beta_B,st.t_ini,
 	  st.t_end,st.q_orb,st.q_tid,st.q_GR,st.uM,st.uL,st.uT,st.h_output,st.sim_name);
 
-  
+
   return 0;
 }
-

@@ -19,7 +19,7 @@
 double fn_R_A(Inpar st, double t, double x[], double y[]){
 
   double m,R_ini,R_end,t_ini,t_end,R;
-  
+
   R_end = 1.1*RS/st.uL;
   R_ini = 2.62*RS/st.uL;
   t_end = 19.0e6*YEARS/st.uT;
@@ -48,7 +48,3 @@ double fn_R_B(Inpar st, double t, double x[], double y[]){
   //return interpol(st,t,x,y);
   return st.R_B;
 }
-
-
-
-
